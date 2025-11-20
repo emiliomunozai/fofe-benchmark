@@ -111,10 +111,7 @@ def train_one_bucket(bucket: list, bucket_max_len: int, vocab: dict, cfg: TrainC
 
     print(f"Number of parameters: {count_parameters(model)}")
 
-    # optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=1e-4)
-    # Optimizer change
-    optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=1e-2)
-
+    optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=1e-4)
 
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer,
@@ -138,7 +135,7 @@ def train_one_bucket(bucket: list, bucket_max_len: int, vocab: dict, cfg: TrainC
     # print(f"Class balance: neg={percent_neg:.2f}%, pos={percent_pos:.2f}%")
     class_weights = torch.tensor([w_neg, w_pos], dtype=torch.float32).to(cfg.device)
 
-    criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=0.2)
+    criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=0.1)
 
     print(f"Training bucket of size {len(bucket)} (train {len(train_ex)}, val {len(val_ex)})")
 
@@ -194,8 +191,7 @@ def train_one_bucket_lstm(bucket: list, bucket_max_len: int, vocab: dict, cfg: T
 
     print(f"Number of parameters: {count_parameters(model)}")
 
-    # optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=1e-4)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=1e-2)
+    optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=1e-4)
 
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer,
